@@ -76,10 +76,7 @@ bool schedule(
         }
         sched.push_back(row);
     }
-    std::vector<int> totalShifts;
-    for (int i = 0; i < numWorkers; i++) {
-        totalShifts.push_back(0);
-    }
+    std::vector<int> totalShifts(numWorkers, 0);
     return backtrack(0, 0, avail, dailyNeed, maxShifts, sched, numDays, numWorkers, totalShifts);
 }
 
