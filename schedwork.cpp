@@ -24,37 +24,6 @@ static const Worker_T INVALID_ID = (unsigned int)-1;
 
 
 // Add your implementation of schedule() and other helper functions here
-bool isValid(const size_t dailyNeed, const size_t maxShifts, DailySchedule& sched, const AvailabilityMatrix& avail) {
-    if (sched.size() != avail.size()) { //Ensure that enough days have been counted
-        return false;
-    }
-    size_t numWorkers = avail[0].size();
-    std::vector<int> numShifts; //Counts how many times a worker has been worked (as to not exceed limit)
-    for (size_t i = 0; i < numWorkers; i++) {
-        numShifts.push_back(0);
-    }
-    for (size_t day = 0; day < sched.size(); day++) {
-        if (sched[day].size() != dailyNeed) { //Ensure that each day has enough for the day
-            return false;
-        }
-        std::set<int> avoidDuplicates;
-        for (size_t i = 0; i < sched[day].size(); i++) {
-            int workerAssigned = sched[day][i];
-            if (avail[day][workerAssigned] == 0) { //Worker availability check
-                return false;
-            }
-            if (avoidDuplicates.find(workerAssigned) != avoidDuplicates.end()) { //Check for accidentally putting worker on the same day
-                return false;
-            }
-            avoidDuplicates.insert(workerAssigned);
-            numShifts[workerAssigned] = numShifts[workerAssigned] + 1;
-            if (numShifts[workerAssigned] > maxShifts) { //Ensure no worker exceeds their max shifts
-                return false;
-            }
-        }
-    }
-    return true;
-}
 bool backtrack(size_t day, size_t space, const AvailabilityMatrix& avail, size_t dailyNeed, size_t maxShifts, DailySchedule& sched, size_t numDays, size_t numWorkers, std::vector<int>& totalShifts) {
     if (day == numDays) {
         return true;
